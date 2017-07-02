@@ -1,0 +1,60 @@
+* {
+  margin:0;
+  padding:0;
+}
+
+.main {
+  /*background-color: #000;*/
+
+}
+
+
+h2 {
+  text-align: center;
+}
+
+ul {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+  color: #000;
+}
+
+a:visited {
+  color: #000;
+}
+
+a:hover {
+  font-weight: bold;
+}
+
+.search {
+  margin-bottom: 2em;
+  text-align: center;
+}.searchMenu {
+  margin:auto auto;
+}
+
+.dataContainer {
+  display: flex;
+}
+
+li {
+  margin-bottom: 0.1em;
+}
+
+.alko {
+  text-align: left;
+  margin-right: auto;
+  margin-left: 0;
+}
+
+.quantity {
+  text-align: right;
+  margin-right: 0;
+  margin-left: auto;
+}
+
+
