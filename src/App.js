@@ -1,33 +1,9 @@
 import React, { Component } from 'react';
+import DataTable from './components/DataTable.js';
+import Select from './components/Select.js';
 import './App.css';
 
-class Data extends Component {
-  constructor(props) {
-    super(props);
 
-    this.makeView = this.makeView.bind(this);
-  }
-
-  makeView() {
-    let alkos = [];
-    let quantities = [];
-    /*
-      let alko = "<li><a target='blank' href='https://www.alko.fi/myymalat-palvelut/ID?referMethod=StoreFinder-List'>ALKO</a></li>";
-      let quantity = "<li class='maara' id='maara'>MAARA</li>";
-    */
-    this.props.data.forEach((index) => {
-      alkos.push(<li><a className='alko' href={'https://www.alko.fi/myymalat-palvelut/'+index.id}>{index.alko}</a></li>);
-      quantities.push(<li className='quantity'>{index.quantity}</li>);
-    })
-    return (<div className='dataContainer'><ul className='alko'>{alkos}</ul><ul className='quantity'>{quantities}</ul></div>);
-  }
-
-  render() {
-    return (
-      this.makeView()
-    );
-  }
-}
 
 class App extends Component {
   
@@ -35,9 +11,7 @@ class App extends Component {
     super(props);
     this.state = {
       gambinaData: [],
-      alkoApi:"https://cors-anywhere.herokuapp.com/https://www.alko.fi/INTERSHOP/web/WFS/Alko-OnlineShop-Site/fi_FI/-/EUR/ViewProduct-Include?SKU=319027",
       viewableCity:'Turku',
-      loadingScreenDisplay:'block'
     }
     
 
@@ -52,16 +26,16 @@ class App extends Component {
   }
 
   fetchData() {
+    const url = "https://cors-anywhere.herokuapp.com/https://www.alko.fi/INTERSHOP/web/WFS/Alko-OnlineShop-Site/fi_FI/-/EUR/ViewProduct-Include?SKU=319027";
     const Entities = require('html-entities').AllHtmlEntities;
     const entities = new Entities();
-    fetch(this.state.alkoApi,{redirect:'follow'})
+    fetch(url, {redirect:'follow'})
       .then((data) => {return data.text()})
       .then((data) => this.parseData(entities.decode(data)))
       .then((data) => {
 
         this.setState({
           gambinaData: data,
-          loadingScreenDisplay:'none'
         })
       }).catch((error) => {
         console.error(error);
@@ -83,7 +57,7 @@ class App extends Component {
 
       alko = lista[i].substring(lista[i].indexOf('Alko ')+5,lista[i].indexOf('</span>'));
 
-      if (alko.indexOf(" ") != -1) city = alko.substring(0,alko.indexOf(" "));
+      if (alko.indexOf(" ") !== -1) city = alko.substring(0,alko.indexOf(" "));
       else city = alko.toString();
 
       quantity = lista[i].substring(lista[i].indexOf('StoreStock=')+11,lista[i].indexOf('" h'));
@@ -97,7 +71,7 @@ class App extends Component {
   filterData() {
     let store = [];
     this.state.gambinaData.forEach((index) => {
-      if (index.city == this.state.viewableCity) store.push(index);
+      if (index.city === this.state.viewableCity) store.push(index);
     })
     return store;
   }
@@ -107,13 +81,11 @@ class App extends Component {
     this.state.gambinaData.forEach((index) => {
       if (!store.includes(index.city)) store.push(index.city);
     })
-    store = store.map((index) => {
-      return <option value={index}>{index}</option>
-    })
     return store;
   }
 
   setViewableCity(event) {
+    console.log(event);
     this.setState(
       {viewableCity:event.target.value}
     );
@@ -123,13 +95,14 @@ class App extends Component {
 
   render() {
     return (
-      <div className='main'>
-        <form className='search'>
-          <select className='searchMenu' value={this.state.viewableCity} onChange={this.setViewableCity}>{this.search()}</select>
-        </form>
-        <h2 style={{display:this.state.loadingScreenDisplay}}>Loading data from API...</h2>
-        <Data data={this.filterData()} />        
-      </div>
+      (this.state.gambinaData.length > 0) ? 
+        <div className='main'>
+          <Select cities={this.search()} current={this.state.viewableCity} onChange={this.setViewableCity} />
+          <DataTable data={this.filterData()} />
+        </div>
+      :
+        <h3>Loading data from API...</h3>          
+      
     );
   }
 }
