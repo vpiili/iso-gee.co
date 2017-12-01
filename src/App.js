@@ -43,10 +43,7 @@ class App extends Component {
   }
 
   parseData(data) {
-    let id = "";
-    let city = "";
-    let alko = "";
-    let quantity = "";
+    let id,city,alko,quantity;
     let store = [];
 
     let lista = data.split("relative store-item stockInStore");
@@ -91,8 +88,6 @@ class App extends Component {
     );
   }
 
-
-
   render() {
     return (
       (this.state.gambinaData.length > 0) ? 
@@ -101,8 +96,7 @@ class App extends Component {
           <DataTable data={this.filterData()} />
         </div>
       :
-        <h3>Loading data from API...</h3>          
-      
+        <h3>Loading data from API...</h3>            
     );
   }
 }
