@@ -39,7 +39,7 @@ const parseData = (data: string) => {
  */
 
 const router: Router = Router()
-
+router.use(require('cors')())
 router.get('/gambinaData', (req: Request, res: Response) => {
 	res.json(store) 
 })
