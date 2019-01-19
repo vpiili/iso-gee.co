@@ -1,20 +1,23 @@
 {
-  "name": "gambina-react",
-  "version": "0.1.0",
-  "private": true,
+  "name": "iso-gee.co",
+  "main": "index.ts",
+  "scripts": {
+    "run": "tsc && node build/index.js",
+    "watch": "concurrently 'tsc --watch' 'nodemon build/index.js'"
+  },
+  "license": "ISC",
   "dependencies": {
-    "html-entities": "^1.2.1",
-    "react": "^15.6.1",
-    "react-bootstrap": "^0.31.5",
-    "react-dom": "^15.6.1"
+    "axios": "^0.18.0",
+    "express": "^4.16.4",
+    "html-entities": "^1.2.1"
   },
   "devDependencies": {
-    "react-scripts": "1.0.8"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "@types/es6-shim": "^0.31.39",
+    "@types/express": "^4.16.0",
+    "concurrently": "^4.1.0",
+    "nodemon": "^1.18.9",
+    "tslint": "^5.12.1",
+    "tslint-clean-code": "^0.2.9",
+    "typescript": "^3.2.4"
   }
 }
