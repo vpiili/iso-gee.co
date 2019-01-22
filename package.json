@@ -8,8 +8,7 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.18.0",
-    "express": "^4.16.4",
-    "html-entities": "^1.2.1"
+    "express": "^4.16.4"
   },
   "devDependencies": {
     "@types/es6-shim": "^0.31.39",

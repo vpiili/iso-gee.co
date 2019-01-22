@@ -17,26 +17,26 @@ type alias GambinaData =
   }
 
 type Data
-    = Failure
-    | Loading
-    | Success String
+  = Failure
+  | Loading
+  | Success String
 
 type alias Model =
-    { city : String
-    , data : Data
-    }
+  { city : String
+  , data : Data 
+  }
 
 url : String
-url = "http://localhost:8080/gambinaData"
+url = "http://localhost:8080/api/gambinaData"
 
 init : ( Model, Cmd Msg )
 init =
-    ( { city = "Turku", data = Loading }
-    , Http.get
-        { url = url
-        , expect = Http.expectString GotData
-        } 
-    )
+  ( { city = "Turku", data = Loading }
+  , Http.get
+    { url = url
+    , expect = Http.expectString GotData
+    } 
+  )
 
 
 
@@ -44,22 +44,22 @@ init =
 
 
 type Msg
-    = Change String | GotData (Result Http.Error String)
+  = Change String | GotData (Result Http.Error String)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    case msg of
-        Change city ->
-            ( { model | city = city }, Cmd.none )
+  case msg of
+    Change city ->
+      ( { model | city = city }, Cmd.none )
 
-        GotData result ->
-            case result of
-                Ok data ->
-                    ( { model | data = Success data }, Cmd.none )
+    GotData result ->
+      case result of
+        Ok data ->
+          ( { model | data = Success data }, Cmd.none )
 
-                Err _ ->
-                    ( { model | data = Failure }, Cmd.none )
+        Err _ ->
+          ( { model | data = Failure }, Cmd.none )
 
 
 
@@ -68,18 +68,25 @@ update msg model =
 
 view : Model -> Html Msg
 view model =
-    case model.data of
-        Failure ->
-            text "Something went wrong!"
-        
-        Loading ->
-            text "Loading..."
+  div []
+    [ select [] []
+    , div [] [ text (gambinaData model.data) ]
+    ]
 
-        Success data ->
-            div []
-                [ select [] []
-                , div [] [ text data ]
-                ]
+gambinaData : Data -> String
+gambinaData data =
+  case data of
+
+    Failure ->
+      "Something went wrong!"
+        
+    Loading ->
+      "Loading..."
+
+    Success json ->
+      json
+
+        
 
 
 
@@ -88,9 +95,9 @@ view model =
 
 main : Program () Model Msg
 main =
-    Browser.element
-        { view = view
-        , init = \_ -> init
-        , update = update
-        , subscriptions = always Sub.none
-        }
+  Browser.element
+    { view = view
+    , init = \_ -> init
+    , update = update
+    , subscriptions = always Sub.none
+    }
