@@ -1,106 +1,53 @@
-import React, { Component } from 'react';
-import DataTable from './components/DataTable.js';
-import Select from './components/Select.js';
-import './App.css';
+import React, { useEffect, useState } from 'react'
+import axios from 'axios'
+import Functionality from './Functionality'
 
+const GAMBINA_ID = '319027'
 
-
-class App extends Component {
+export default () => {
+  const [data, setData] = useState(null)
   
-  constructor(props) {
-    super(props);
-    this.state = {
-      gambinaData: [],
-      viewableCity:'Turku',
-    }
-    
-
-    this.fetchData = this.fetchData.bind(this);
-    this.parseData = this.parseData.bind(this);
-    this.filterData = this.filterData.bind(this);
-    this.search = this.search.bind(this);
-    this.setViewableCity = this.setViewableCity.bind(this);
-
-    this.fetchData();
-
-  }
-
-  fetchData() {
-    const url = "https://cors-anywhere.herokuapp.com/https://www.alko.fi/INTERSHOP/web/WFS/Alko-OnlineShop-Site/fi_FI/-/EUR/ViewProduct-Include?SKU=319027";
-    const Entities = require('html-entities').AllHtmlEntities;
-    const entities = new Entities();
-    fetch(url, {redirect:'follow'})
-      .then((data) => {return data.text()})
-      .then((data) => this.parseData(entities.decode(data)))
-      .then((data) => {
-
-        this.setState({
-          gambinaData: data,
-        })
-      }).catch((error) => {
-        console.error(error);
-      });
-  }
-
-  parseData(data) {
-    let id,city,alko,quantity;
-    let store = [];
-
-    let lista = data.split("relative store-item stockInStore");
-    lista.shift();
-
-    for (var i = 0 ; i < lista.length ; i++) {
-      id = lista[i].substr(lista[i].indexOf("StoreID=")+8,4);
-
-      alko = lista[i].substring(lista[i].indexOf('Alko ')+5,lista[i].indexOf('</span>'));
-
-      if (alko.indexOf(" ") !== -1) city = alko.substring(0,alko.indexOf(" "));
-      else city = alko.toString();
-
-      quantity = lista[i].substring(lista[i].indexOf('StoreStock=')+11,lista[i].indexOf('" h'));
-
-      store.push({id:id,city:city,alko:alko,quantity:quantity});
-    }
-
-    return store;
-  }
-
-  filterData() {
-    let store = [];
-    this.state.gambinaData.forEach((index) => {
-      if (index.city === this.state.viewableCity) store.push(index);
-    })
-    return store;
-  }
-
-  search() {
-    let store = [];
-    this.state.gambinaData.forEach((index) => {
-      if (!store.includes(index.city)) store.push(index.city);
-    })
-    return store;
-  }
-
-  setViewableCity(event) {
-    console.log(event);
-    this.setState(
-      {viewableCity:event.target.value}
-    );
-  }
-
-  render() {
-    return (
-      (this.state.gambinaData.length > 0) ? 
-        <div className='main'>
-          <Select cities={this.search()} current={this.state.viewableCity} onChange={this.setViewableCity} />
-          <DataTable data={this.filterData()} />
-        </div>
-      :
-        <h3>Loading data from API...</h3>            
-    );
-  }
+  useEffect(() => {
+    fetchData(GAMBINA_ID)
+      .then(data => parseData(data))
+      .then(data => setData(data))
+      .catch(e => console.error('Something is wrong :)'))
+  }, [])
+  
+  return (
+    data ? 
+    <Functionality data={data} /> :
+    <p>Fetching data from API..</p>
+  )
 }
 
+const fetchData = (id) => {
+  const url = `https://cors-anywhere.herokuapp.com/https://www.alko.fi/INTERSHOP/web/WFS/Alko-OnlineShop-Site/fi_FI/-/EUR/ViewProduct-Include?SKU=${id}`
+  return axios.get(url)
+    .then(res => res.data)
+    .catch(e => console.error(e))
+}
 
+const parseData = (rawData) => {
+  const rawDataInList = rawData
+    .split('relative store-item stockInStore')
+    .filter(e => e.includes('data-store-item'))
+    .map(e => e.substring(e.indexOf('<a'), e.indexOf('</a>')))
 
-export default App;
+  return rawDataInList.map(e => {
+    const rows = e.split("\n")
+
+    const storeId = rows[0].substring(rows[0].indexOf('StoreID=')+8, rows[0].indexOf('&StoreStock'))
+    const stock = rows[0].substring(rows[0].indexOf('&StoreStock=')+12, rows[0].indexOf('" href'))
+    const name = rows[1].substring(49, rows[1].indexOf('</span')).replace(/&Auml;/g, 'Ä').replace(/&auml;/g, 'ä').replace(/&Ouml;/g, 'Ö').replace(/&ouml;/g, 'ö')
+    const city = name.substring(0, 4) === 'Alko' ? name.split(" ")[1] : name.split(" ")[0]
+
+    return {
+      storeId: storeId,
+      stock: stock,
+      name: name,
+      city: city
+    }
+
+  })
+}

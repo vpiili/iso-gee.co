@@ -1,4 +1,4 @@
-body {
+* {
     margin: 0;
     padding: 0;
 }
@@ -45,3 +45,46 @@ body {
 }
 
 @import 'https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css';
+
+select {
+    display: block;
+    margin: 0 auto 2em auto;
+}
+
+ul {
+    list-style: none;
+}
+
+li {
+    margin-bottom: 0.1em;
+}
+
+.left {
+    float: left;
+    margin: 0 auto 0 0;
+}
+
+.right {
+    float: right;
+    margin: 0 0 0 auto;
+}
+
+a {
+    text-decoration: none;
+    color: #000;
+}
+
+a:hover {
+    font-weight: bold;
+    color: #000;
+    text-decoration: none;
+}
+
+a:visited {
+    color: #000;
+    text-decoration: none;
+}
+
+a:focus {
+    text-decoration: none;
+}
