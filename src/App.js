@@ -17,7 +17,7 @@ export default () => {
   return (
     data ? 
     <Functionality data={data} /> :
-    <p>Fetching data from API..</p>
+    <h3>Fetching data from API..</h3>
   )
 }
 

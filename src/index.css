@@ -8,6 +8,8 @@
     width: 25em;
     margin: auto auto;
     margin-top: 4em;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: large;
 }
 
 .spinningBottle {
@@ -44,7 +46,10 @@
     }
 }
 
-@import 'https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css';
+h3 {
+    margin-top: 10em;
+    text-align: center;
+}
 
 select {
     display: block;
@@ -58,6 +63,7 @@ ul {
 li {
     width: 100%;
     display: inline-block;
+    margin-bottom: 0.3em;
 }
 
 .left {
