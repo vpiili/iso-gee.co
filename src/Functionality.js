@@ -5,14 +5,21 @@ export default ({data}) => {
 
     return (
         <div className='container'>
-            <select value={viewableCity} onChange={e => setViewableCity(e.target.value)}>{getCityOptions(data)}</select>
-            <ul>
-                {getListItems(data, viewableCity)}
-            </ul>
-           
+            <CitySelect data={data} viewableCity={viewableCity} setViewableCity={setViewableCity} />
+            <AlkoList data={data} viewableCity={viewableCity} />
         </div>
     )
 }
+
+const CitySelect = ({data, viewableCity, setViewableCity}) => (
+    <select value={viewableCity} onChange={e => setViewableCity(e.target.value)}>{getCityOptions(data)}</select>
+)
+
+const AlkoList = ({data, viewableCity}) => (
+    <ul>
+        {getListItems(data, viewableCity)}
+    </ul>
+)
 
 const getCityOptions = (data) => {
     return [...new Set(data.map(e => e.city))].map(city => <option key={city}>{city}</option>)
