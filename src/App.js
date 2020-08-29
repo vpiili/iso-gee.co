@@ -36,9 +36,10 @@ const parseData = (rawData) => {
 
   return rawDataInList.map(e => {
     const rows = e.split("\n")
+    console.log(rows)
 
     const storeId = rows[0].substring(rows[0].indexOf('StoreID=')+8, rows[0].indexOf('&StoreStock'))
-    const stock = rows[0].substring(rows[0].indexOf('&StoreStock=')+12, rows[0].indexOf('" href'))
+    const stock = rows[3].substring(2, rows[3].indexOf('<'))
     const name = rows[1].substring(49, rows[1].indexOf('</span')).replace(/&Auml;/g, 'Ä').replace(/&auml;/g, 'ä').replace(/&Ouml;/g, 'Ö').replace(/&ouml;/g, 'ö')
     const city = name.substring(0, 4) === 'Alko' ? name.split(" ")[1] : name.split(" ")[0]
 
