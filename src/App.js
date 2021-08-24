@@ -36,7 +36,6 @@ const parseData = (rawData) => {
 
   return rawDataInList.map(e => {
     const rows = e.split("\n")
-    console.log(rows)
 
     const storeId = rows[0].substring(rows[0].indexOf('StoreID=')+8, rows[0].indexOf('&StoreStock'))
     const stock = rows[3].substring(2, rows[3].indexOf('<'))
