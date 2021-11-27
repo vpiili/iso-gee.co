@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import Functionality from './Functionality'
-
-
 
 export default () => {
   const [data, setData] = useState(null)
@@ -17,12 +14,44 @@ export default () => {
   
   return (
     data ? 
-    <Functionality data={data} /> :
+    <Application data={data} /> :
     <h3>Fetching data from API..</h3>
   )
 }
 
-const fetchData = () => axios.get('http://localhost:8000/gambina')
+const Application = ({data}) => {
+  const [viewableCity, setViewableCity] = useState('Turku')
+
+  return (
+      <div className='container'>
+          <CitySelect data={data} viewableCity={viewableCity} setViewableCity={setViewableCity} />
+          <AlkoList data={data} viewableCity={viewableCity} />
+      </div>
+  )
+}
+
+const CitySelect = ({data, viewableCity, setViewableCity}) => (
+  <select value={viewableCity} onChange={e => setViewableCity(e.target.value)}>{getCityOptions(data)}</select>
+)
+
+const AlkoList = ({data, viewableCity}) => (
+  <ul>
+      {getListItems(data, viewableCity)}
+  </ul>
+)
+
+const getCityOptions = (data) => {
+  return [...new Set(data.map(e => e.city))].map(city => <option key={city}>{city}</option>)
+}
+
+const getListItems = (data, viewableCity) => {
+  return data
+    .filter(e => e.city === viewableCity)
+    .map(e => <li key={e.name}><a href={`https://www.alko.fi/myymalat-palvelut/${e.storeId}`} target='_blank' rel='noopener noreferrer'><span className='left'>{e.name}</span><span className='right'>{e.stock}</span></a></li>)
+}
+
+
+const fetchData = () => axios.get('/data')
 
 const parseData = (rawData) => {
   console.log(rawData)
