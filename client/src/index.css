@@ -1,0 +1,97 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+#root {
+    background-color: rgba(255, 255, 255, 0.5);
+    width: 25em;
+    margin: auto auto;
+    margin-top: 4em;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: large;
+}
+
+.spinningBottle {
+    z-index: -1;
+    position: absolute;
+    top: 25%;
+    right: 75%;
+    animation: spinning 5s linear infinite;
+}
+
+.circelingBottle {
+    z-index: -2;
+    position: absolute;
+    top: 40%;
+    right: 25%;
+    animation: circeling 7s linear infinite;
+}
+
+@keyframes spinning {
+    from {
+        transform: rotate(0deg)
+    }
+    to {
+        transform: rotate(360deg)
+    }
+}
+
+@keyframes circeling {
+    from {
+        transform: rotate(0deg) translateX(150px) rotate(0deg)
+    }
+    to {
+        transform: rotate(360deg) translateX(150px) rotate(-360deg)
+    }
+}
+
+h3 {
+    margin-top: 10em;
+    text-align: center;
+}
+
+select {
+    display: block;
+    margin: 0 auto 2em auto;
+}
+
+ul {
+    list-style: none;
+}
+
+li {
+    width: 100%;
+    display: inline-block;
+    margin-bottom: 0.3em;
+}
+
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+
+a {
+    display: inline-block;
+    width: 100%;
+    text-decoration: none;
+    color: #000;
+}
+
+a:hover {
+    font-weight: bold;
+    color: #000;
+    text-decoration: none;
+}
+
+a:visited {
+    color: #000;
+    text-decoration: none;
+}
+
+a:focus {
+    text-decoration: none;
+}
