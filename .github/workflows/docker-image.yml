@@ -3,14 +3,14 @@ name: Build and Publish
 on:
   # run it on push to the default repository branch
   push:
-    branches: [main]
+    branches: [master]
   # run it during pull request
   pull_request:
 
 jobs:
   # define job to build and publish docker image
   build-and-push-docker-image:
-    name: Build Docker image and push to repositories
+    name: Build Docker image and push to container registry
     # run only when code is compiling and tests are passing
     runs-on: ubuntu-latest
 
@@ -30,7 +30,7 @@ jobs:
           username: vpiili
           password: ${{ secrets.DOCKER_PAT }}
       
-      - name: Build image and push to Docker Hub and GitHub Container Registry
+      - name: Build image and push to Docker Hub
         uses: docker/build-push-action@v2
         with:
           # relative path to the place where source code with Dockerfile is located
@@ -39,7 +39,7 @@ jobs:
           tags: |
             vpiili/gambina:latest 
           # build on feature branches, push only on main branch
-          push: ${{ github.ref == 'refs/heads/main' }}
+          push: ${{ github.ref == 'refs/heads/master' }}
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}

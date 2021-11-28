@@ -1,4 +1,4 @@
-# iso-gee.co
+# Gambina
 
 Tracks amounts of drink Gambina in Finland's Alkos.
-Made with ReactJS
+Made with Node & React <3
